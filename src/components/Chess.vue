@@ -1,9 +1,13 @@
 <template>
   <div
-    :class="['chess', { red: color === 'red', black: color === 'black' }]"
+    :class="[
+      'chess',
+      { red: color === 'red', black: color === 'black', selected: isSelected },
+    ]"
     :style="style"
+    @click="handleClick"
   >
-    <span>{{ name }}</span>
+    <span :class="{ red: color === 'red' }">{{ name }}</span>
   </div>
 </template>
 
@@ -15,26 +19,52 @@ export default {
   props: {
     name: {
       type: String,
-      required: true
+      required: true,
     },
     position: {
       type: String,
-      required: true
+      required: true,
     },
     color: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
+    selectedChess: {
+      validator(value) {
+        return (
+          value === null ||
+          Object.prototype.toString.call(value).slice(8, -1) === 'Object'
+        )
+      },
+      required: true,
+    },
+    playerColor: {
+      type: String,
+      required: true,
+    },
   },
   computed: {
     style() {
       const [x, y] = this.position.split(',').map(Number)
 
       return {
-        ...getChessPosition(x, y)
+        ...getChessPosition(x, y),
       }
-    }
-  }
+    },
+    isSelected() {
+      return this.selectedChess && this.selectedChess.position === this.position
+    },
+  },
+  methods: {
+    handleClick() {
+      if (this.color !== this.playerColor && this.selectedChess === null) return
+
+      this.$bus.$emit('click-chess', {
+        position: this.position,
+        color: this.color,
+      })
+    },
+  },
 }
 </script>
 
@@ -52,14 +82,44 @@ export default {
   cursor: pointer;
   left: 0;
   top: 0;
-  // &:hover {
-  //   box-shadow: 2px 2px 2px;
-  // }
+  &:hover {
+    box-shadow: 0 0 10px #000;
+  }
   &.red {
     color: var(--red-player-color);
   }
   &.black {
     color: var(--black-player-color);
+  }
+  span {
+    &.red {
+      display: block;
+      transform: rotate(180deg);
+    }
+  }
+  &.selected {
+    &::before {
+      content: '';
+      background-color: transparent;
+      width: 15px;
+      height: 15px;
+      border-top: 2px solid #ccc;
+      border-left: 2px solid #ccc;
+      position: absolute;
+      left: -8px;
+      top: -8px;
+    }
+    &::after {
+      content: '';
+      background-color: transparent;
+      width: 15px;
+      height: 15px;
+      border-right: 2px solid #ccc;
+      border-bottom: 2px solid #ccc;
+      position: absolute;
+      right: -8px;
+      bottom: -8px;
+    }
   }
 }
 </style>

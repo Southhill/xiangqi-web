@@ -94,6 +94,8 @@
           :name="chess.name"
           :position="chess.position"
           :color="chess.color"
+          :selected-chess="selectedChess"
+          :player-color="playerColor"
         />
       </div>
     </div>
@@ -109,17 +111,31 @@ export default {
   props: {
     chessboard: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
+    selectedChess: {
+      validator(value) {
+        return (
+          value === null ||
+          Object.prototype.toString.call(value).slice(8, -1) === 'Object'
+        )
+      },
+      required: true,
+    },
+    playerColor: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {}
   },
   computed: {
     chessPool() {
+      // todo 偏置棋盘
       return this.chessboard ? this.chessboard.usableChessPool : []
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -133,6 +149,7 @@ export default {
   border: 7px solid #522a20;
   padding: 40px;
   width: 594px;
+  overflow: hidden;
   // height: 600px;
   &-body {
     border: 6px double #6a2c15;
