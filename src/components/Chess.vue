@@ -1,5 +1,10 @@
 <template>
-  <div class="chess" :style="style">{{ name }}</div>
+  <div
+    :class="['chess', { red: color === 'red', black: color === 'black' }]"
+    :style="style"
+  >
+    {{ name }}
+  </div>
 </template>
 
 <script>
@@ -13,6 +18,10 @@ export default {
       required: true
     },
     position: {
+      type: String,
+      required: true
+    },
+    color: {
       type: String,
       required: true
     }
@@ -29,16 +38,22 @@ export default {
 
 <style lang="less" scoped>
 .chess {
-  width: 30px;
-  height: 30px;
+  width: var(--chess-size);
+  height: var(--chess-size);
+  line-height: calc(var(--chess-size) - 3px);
   border-radius: 50%;
   border: 3px double gray;
-  line-height: 30px;
   transform: translate(-50%, -50%);
-  background-color: #ccc;
+  background-color: #e9a051;
   font-size: 1.5em;
   position: absolute;
   top: 0;
   left: 0;
+  &.red {
+    color: var(--red-player-color);
+  }
+  &.black {
+    color: var(--black-player-color);
+  }
 }
 </style>

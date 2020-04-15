@@ -93,6 +93,7 @@
           :key="index"
           :name="chess.name"
           :position="chess.position"
+          :color="chess.color"
         />
       </div>
     </div>
@@ -110,11 +111,13 @@ export default {
       chessPool: [
         {
           name: '车',
-          position: '0,0'
+          position: '0,0',
+          color: 'red'
         },
         {
           name: '将',
-          position: '0,4'
+          position: '0,4',
+          color: 'black'
         }
       ]
     }
@@ -147,7 +150,7 @@ export default {
   }
   &-row {
     width: 100%;
-    height: 73px;
+    height: var(--chessboard-cell-size);
     border-bottom: 2px solid #6a2c15;
     display: flex;
     &:nth-last-of-type(1) {
@@ -157,7 +160,7 @@ export default {
   &-divide {
     border-bottom: 2px solid #6a2c15;
     display: flex;
-    height: 73px;
+    height: var(--chessboard-cell-size);
     &-text {
       flex-grow: 1;
       display: flex;
@@ -168,9 +171,9 @@ export default {
       letter-spacing: 20px;
       span {
         font-size: 2.5em;
-        color: red;
+        color: var(--red-player-color);
         &.rotate {
-          color: black;
+          color: var(--black-player-color);
           transform: rotate(180deg);
         }
       }
