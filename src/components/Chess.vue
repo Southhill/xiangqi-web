@@ -3,7 +3,7 @@
     :class="['chess', { red: color === 'red', black: color === 'black' }]"
     :style="style"
   >
-    {{ name }}
+    <span>{{ name }}</span>
   </div>
 </template>
 
@@ -30,7 +30,9 @@ export default {
     style() {
       const [x, y] = this.position.split(',').map(Number)
 
-      return getChessPosition(x, y)
+      return {
+        ...getChessPosition(x, y)
+      }
     }
   }
 }
@@ -47,8 +49,12 @@ export default {
   background-color: #e9a051;
   font-size: 1.5em;
   position: absolute;
-  top: 0;
+  cursor: pointer;
   left: 0;
+  top: 0;
+  // &:hover {
+  //   box-shadow: 2px 2px 2px;
+  // }
   &.red {
     color: var(--red-player-color);
   }

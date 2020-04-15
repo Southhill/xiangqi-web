@@ -77,7 +77,7 @@
         <div class="chessboard-cell"></div>
         <div class="chessboard-cell"></div>
       </div>
-      <div class="chessboard-row">
+      <div class="chessboard-row" style="border-bottom: 0 none;">
         <div class="chessboard-cell"></div>
         <div class="chessboard-cell"></div>
         <div class="chessboard-cell"></div>
@@ -106,20 +106,18 @@ import Chess from './Chess.vue'
 export default {
   name: 'Chessboard',
   components: { Chess },
+  props: {
+    chessboard: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
-    return {
-      chessPool: [
-        {
-          name: '车',
-          position: '0,0',
-          color: 'red'
-        },
-        {
-          name: '将',
-          position: '0,4',
-          color: 'black'
-        }
-      ]
+    return {}
+  },
+  computed: {
+    chessPool() {
+      return this.chessboard ? this.chessboard.usableChessPool : []
     }
   }
 }
@@ -134,7 +132,7 @@ export default {
   align-content: center;
   border: 7px solid #522a20;
   padding: 40px;
-  width: 600px;
+  width: 594px;
   // height: 600px;
   &-body {
     border: 6px double #6a2c15;
@@ -153,9 +151,6 @@ export default {
     height: var(--chessboard-cell-size);
     border-bottom: 2px solid #6a2c15;
     display: flex;
-    &:nth-last-of-type(1) {
-      border-bottom: 0 none;
-    }
   }
   &-divide {
     border-bottom: 2px solid #6a2c15;
@@ -171,9 +166,9 @@ export default {
       letter-spacing: 20px;
       span {
         font-size: 2.5em;
-        color: var(--red-player-color);
+        color: var(--black-player-color);
         &.rotate {
-          color: var(--black-player-color);
+          color: var(--red-player-color);
           transform: rotate(180deg);
         }
       }

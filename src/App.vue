@@ -1,12 +1,13 @@
 <template>
   <div id="app">
-    <Chessboard />
+    <Chessboard :chessboard="chessboard" />
   </div>
 </template>
 
 <script>
-import Chessboard from './components/Chessboard.vue'
 import Chessgame from 'xiangqi'
+
+import Chessboard from './components/Chessboard.vue'
 
 export default {
   name: 'App',
@@ -16,6 +17,11 @@ export default {
   data() {
     return {
       chessgame: new Chessgame()
+    }
+  },
+  computed: {
+    chessboard() {
+      return this.chessgame.chessboard
     }
   },
   created() {
