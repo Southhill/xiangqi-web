@@ -97,6 +97,19 @@
           :selected-chess="selectedChess"
           :player-color="playerColor"
         />
+        <template v-for="(list, index) in grid">
+          <template v-for="(position, idx) in list">
+            <div
+              v-if="
+                chessPool.findIndex(chess => chess.position === position) === -1
+              "
+              :key="position"
+              :style="placeholderChessStyle[index][idx]"
+              class="placeholder-chess"
+              @click="clickPlaceholderChess(position)"
+            ></div>
+          </template>
+        </template>
       </div>
     </div>
   </div>
@@ -104,6 +117,7 @@
 
 <script>
 import Chess from './Chess.vue'
+import { getChessPosition } from '../utils/position'
 
 export default {
   name: 'Chessboard',
@@ -127,13 +141,30 @@ export default {
       required: true
     }
   },
-  data() {
-    return {}
-  },
   computed: {
     chessPool() {
       // todo 偏置棋盘
       return this.chessboard ? this.chessboard.usableChessPool : []
+    },
+    grid() {
+      return this.chessboard ? this.chessboard.grid : []
+    },
+    placeholderChessStyle() {
+      return this.grid.map(list => {
+        return list.map(position => {
+          const [x, y] = position.split(',').map(Number)
+          return {
+            ...getChessPosition(x, y)
+          }
+        })
+      })
+    }
+  },
+  methods: {
+    clickPlaceholderChess(position) {
+      if (this.selectedChess) {
+        this.$bus.$emit('click-placeholder', position)
+      }
     }
   }
 }
@@ -161,7 +192,86 @@ export default {
       left: 0;
       width: 100%;
       height: 100%;
+      z-index: 11;
+      .placeholder-chess {
+        width: var(--chess-size);
+        height: var(--chess-size);
+        line-height: calc(var(--chess-size) - 3px);
+        border-radius: 50%;
+        // border: 3px double gray;
+        // background-color: #e9a051;
+        transform: translate(-50%, -50%);
+        position: absolute;
+        cursor: pointer;
+        left: 0;
+        top: 0;
+        &:hover::before {
+          content: '';
+          background-color: transparent;
+          width: 15px;
+          height: 15px;
+          border-top: 2px solid #ccc;
+          border-left: 2px solid #ccc;
+          position: absolute;
+          left: -8px;
+          top: -8px;
+        }
+        &:hover::after {
+          content: '';
+          background-color: transparent;
+          width: 15px;
+          height: 15px;
+          border-right: 2px solid #ccc;
+          border-bottom: 2px solid #ccc;
+          position: absolute;
+          right: -8px;
+          bottom: -8px;
+        }
+      }
     }
+    // .placeholder-chess-body {
+    //   position: absolute;
+    //   top: 0;
+    //   left: 0;
+    //   width: 100%;
+    //   height: 100%;
+    //   z-index: 10;
+    //   .placeholder-chess {
+    //     width: var(--chess-size);
+    //     height: var(--chess-size);
+    //     line-height: calc(var(--chess-size) - 3px);
+    //     border-radius: 50%;
+    //     // border: 3px double gray;
+    //     // background-color: #e9a051;
+    //     transform: translate(-50%, -50%);
+    //     position: absolute;
+    //     cursor: pointer;
+    //     left: 0;
+    //     top: 0;
+    //     &:hover::before {
+    //       content: '';
+    //       background-color: transparent;
+    //       width: 15px;
+    //       height: 15px;
+    //       border-top: 2px solid #ccc;
+    //       border-left: 2px solid #ccc;
+    //       position: absolute;
+    //       left: -8px;
+    //       top: -8px;
+    //     }
+    //     &:hover::after {
+    //       content: '';
+    //       background-color: transparent;
+    //       width: 15px;
+    //       height: 15px;
+    //       border-right: 2px solid #ccc;
+    //       border-bottom: 2px solid #ccc;
+    //       position: absolute;
+    //       right: -8px;
+    //       bottom: -8px;
+    //     }
+    //   }
+    // }
   }
   &-row {
     width: 100%;

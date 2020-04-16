@@ -47,16 +47,23 @@ export default {
         this.selectedPosition = null
       } else {
         // 吃掉对方的棋子
-        const treads = this.chessgame.player
-          .getSelfChess(this.selectedChess.position)
-          .getTreads(this.chessgame.chessboard)
-
-        if (treads.indexOf(chess.position) > -1) {
-          this.chessgame.playChess(this.selectedChess.position, chess.position)
-          this.selectedChess = null
-        }
+        this.playChess(chess.position)
       }
     })
+
+    this.$bus.$on('click-placeholder', this.playChess)
+  },
+  methods: {
+    playChess(position) {
+      const treads = this.chessgame.player
+        .getSelfChess(this.selectedChess.position)
+        .getTreads(this.chessgame.chessboard)
+
+      if (treads.indexOf(position) > -1) {
+        this.chessgame.playChess(this.selectedChess.position, position)
+        this.selectedChess = null
+      }
+    }
   }
 }
 </script>
