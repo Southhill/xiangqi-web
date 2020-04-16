@@ -111,7 +111,7 @@ export default {
   props: {
     chessboard: {
       type: Object,
-      required: true,
+      required: true
     },
     selectedChess: {
       validator(value) {
@@ -120,12 +120,12 @@ export default {
           Object.prototype.toString.call(value).slice(8, -1) === 'Object'
         )
       },
-      required: true,
+      required: true
     },
     playerColor: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
   data() {
     return {}
@@ -134,8 +134,8 @@ export default {
     chessPool() {
       // todo 偏置棋盘
       return this.chessboard ? this.chessboard.usableChessPool : []
-    },
-  },
+    }
+  }
 }
 </script>
 
