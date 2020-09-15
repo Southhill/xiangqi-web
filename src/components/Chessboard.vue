@@ -172,13 +172,13 @@ export default {
 
 <style scoped lang="less">
 .chessboard {
-  font-family: '隶书';
+  font-family: LiSu, STLiti;
   background-color: #fff3d4;
   display: flex;
   justify-content: center;
   align-content: center;
   border: 7px solid #522a20;
-  padding: 40px;
+  padding: 28px;
   width: 594px;
   overflow: hidden;
   // height: 600px;
